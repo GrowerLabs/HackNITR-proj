@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DjMeet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+
+
+</head>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap");
+</style>
+
+<style>
+    body {
+        background-color: #292929;
+        font-family: "Open Sans", sans-serif;
+    }
+
+    .btn-circle.btn-sm {
+        width: 30px;
+        height: 30px;
+        padding: 6px 0px;
+        border-radius: 15px;
+        font-size: 8px;
+        text-align: center;
+    }
+
+    .btn-circle.btn-md {
+        width: 40px;
+        height: 40px;
+        padding: 3px 6px;
+        border-radius: 25px;
+        font-size: 10px;
+        text-align: center;
+    }
+
+    .btn-circle.btn-xl {
+        width: 70px;
+        height: 70px;
+        padding: 10px 16px;
+        border-radius: 35px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    @media screen and (max-width: 2000px) {
+        .video-container {
+            height: 100%;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .video-container {
+            height: 70%;
+            /* max-height: 50vh; */
+        }
+
+        #container {
+            overflow-y: hidden;
+        }
+    }
+
+    @media screen and (max-width: 2000px) {
+        .video-container2 {
+            height: 200px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .video-container2 {
+            height: 15vh;
+        }
+    }
+
+    #container {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100vw !important;
+        height: 90vh;
+    }
+
+    .video-container2 {
+        background-color: #121212;
+        width: 100%;
+        border-radius: 8px;
+        border: 2px solid #71a0ce;
+    }
+
+    .video-container {
+        background-color: #121212;
+        border-radius: 8px;
+        border: 2px solid #7c7937;
+        max-height: 80vh;
+    }
+
+    #chat_container {
+        display: none;
+        height: 80vh;
+        background-color: #121212;
+        border-radius: 8px;
+    }
+
+    #chat-log {
+        height: 83%;
+        overflow-y: scroll;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+</style>
+
+<body>
+    <div class="container-fluid" id="container">
+        <div id="row" style="width: 100%; height: 100%" class="row mt-4 mb-2">
+            <div id="main_container" style="height: 100%" class="col-12">
+                <div style="height: 100%" class="row">
+                    <div id="ours_container" class="col-md-3 col-lg-3 mb-3 align-self-center">
+                        <div class="video-container2">
+                            <video muted="muted" style="width: 100%; height: 100%" id="ours"></video>
+                           
+                        </div>
+                    </div>
+
+                    <div style="max-width: 900px; height: 100%" id="remote_container"
+                        class="col-md-6 col-lg-9 mb-3 align-self-center">
+                        <div class="video-container">
+                            <video style="width: 100%; height: 100%" id="remote"></video>
+                         
+                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="chat_container" class="col-3 mb-3">
+                <button id="tts-toggle" class="btn btn-circle btn-sm btn-danger mt-3 mx-2">
+                    <img style="margin-top: -2px" src="https://img.icons8.com/ios-glyphs/20/000000/speaker.png" />
+                </button>
+
+                <div id="chat-log"></div>
+                <!-- <textarea id="chat-log" cols="30" rows="20"></textarea><br> -->
+                <div class="d-flex justify-content-start align-self-end">
+                    <input id="chat-message-input" type="text" class="form-control" />
+                    <input id="chat-message-submit" type="button" value="Send" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav style="background-color: #121212" class="navbar fixed-bottom navbar-dark py-4">
+        <div class="container-fluid d-flex justify-content-between">
+            <div class="share">
+       
+                <a style="text-decoration: none; padding-left: 1rem" href="#" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                        class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                        <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path fill-rule="evenodd"
+                            d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                </a>
+            </div>
+            <div class="control">
+                <button id="video-toggle" class="btn btn-circle btn-md btn-danger mx-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                        class="bi bi-camera-video" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
+                    </svg>
+                </button>
+                <button id="audio-toggle" class="btn btn-circle btn-md btn-danger mx-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-mic"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                        <path
+                            d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
+                    </svg>
+                </button>
+
+                <button id="bg-toggle" class="btn btn-circle btn-md btn-danger mx-2">
+                    <img src="https://img.icons8.com/material-outlined/24/ffffff/musical-notes.png" />
+                </button>
+
+                <a style="padding-top: 8px" id="close-toggle" class="btn btn-circle btn-md btn-danger mx-2"
+                    href="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                        class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" />
+                        <path fill-rule="evenodd"
+                            d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" />
+                    </svg>
+                </a>
+            </div>
+
+            <div>
+                <a style="text-decoration: none; padding-right: 1rem" href="#" id="chat_toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                        class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+                        <path
+                            d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                        <path
+                            d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- <button style="display: none;" class="btn btn-circle btn-outline-primary btn-md mx-2" id="call">Call</button>  -->
+        </div>
+    </nav>
+
+ 
+
+   
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+   
+</body>
+
+</html>
