@@ -1,3 +1,4 @@
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
 
-
+    <!-- <script defer src="{% static 'script.js' %}"></script> -->
 </head>
 
 <style>
@@ -123,7 +124,18 @@
                     <div id="ours_container" class="col-md-3 col-lg-3 mb-3 align-self-center">
                         <div class="video-container2">
                             <video muted="muted" style="width: 100%; height: 100%" id="ours"></video>
-                           
+                            {% if created == "created" %}
+
+                            <h5 style="
+                    margin-top: -3rem;
+                    color: #ffffff;
+                    opacity: 0.7;
+                    margin-left: 1rem;
+                  ">
+                                Host
+                            </h5>
+
+                            {% endif %}
                         </div>
                     </div>
 
@@ -131,8 +143,16 @@
                         class="col-md-6 col-lg-9 mb-3 align-self-center">
                         <div class="video-container">
                             <video style="width: 100%; height: 100%" id="remote"></video>
-                         
-                       
+                            {% if created != "created" %}
+                            <h3 style="
+                    margin-top: -4rem;
+                    color: #ffffff;
+                    opacity: 0.7;
+                    margin-left: 1rem;
+                  ">
+                                Host
+                            </h3>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -155,8 +175,8 @@
     <nav style="background-color: #121212" class="navbar fixed-bottom navbar-dark py-4">
         <div class="container-fluid d-flex justify-content-between">
             <div class="share">
-       
-                <a style="text-decoration: none; padding-left: 1rem" href="#" >
+                <input style="display: none" type="text" value="{{room}}" id="myInput" />
+                <a style="text-decoration: none; padding-left: 1rem" href="#" onclick="copyFunction()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
                         class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                         <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
@@ -188,7 +208,7 @@
                 </button>
 
                 <a style="padding-top: 8px" id="close-toggle" class="btn btn-circle btn-md btn-danger mx-2"
-                    href="">
+                    href="{% url 'close_meet' room created %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
                         class="bi bi-x-lg" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -215,9 +235,71 @@
         </div>
     </nav>
 
- 
+    <!-- modal start -->
+
+    <div id="modal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Participant request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Someone wants to join ...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button class="btn btn-outline-primary mx-2" id="call">
+                        Accept
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal end -->
+
+    <!-- bg audios -->
+
+    <audio id="happyAudio" class="audios">
+        <source src="{% static 'happy_new.mp3' %}" type="audio/mpeg" />
+        Your browser does not support the audio element.
+    </audio>
 
    
+
+
+    <audio id="notificationAudio" >
+        <source src="{% static 'chat_notification.mp3' %}" type="audio/mpeg" />
+        Your browser does not support the audio element.
+    </audio>
+
+    <audio id="neutralAudio" >
+        <source src="{% static 'crystal.mp3' %}" type="audio/mpeg"  autoplay="false" />
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="happyAudio" >
+        <source src="{% static 'happy_new.mp3' %}" type="audio/mpeg"  autoplay="false" />
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="sadAudio" >
+        <source src="{% static 'sad_new.mp3' %}" type="audio/mpeg"  autoplay="false" />
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="angryAudio" >
+        <source src="{% static 'angry_new.mp3' %}" type="audio/mpeg"  autoplay="false" />
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="fearfulAudio" >
+        <source src="{% static 'fearful_new.mp3' %}" type="audio/mpeg"  autoplay="false" />
+        Your browser does not support the audio element.
+    </audio>
+
+
+
+    <!-- end -->
 
 
 
@@ -225,7 +307,602 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 
-   
+    <!-- face AI -->
+
+    <script src="{% static 'face-api.min.js' %}"></script>
+
+    <script>
+        // random name generator
+
+        function randomstring(L) {
+            var s = "";
+            var randomchar = function () {
+                var n = Math.floor(Math.random() * 62);
+                if (n < 10) return n; //1-10
+                if (n < 36) return String.fromCharCode(n + 55); //A-Z
+                return String.fromCharCode(n + 61); //a-z
+            };
+            while (s.length < L) s += randomchar();
+            return s;
+        }
+
+        var randomName = randomstring(5);
+        console.log(randomstring(5));
+
+        // random name generator end
+
+        // button event listeners start
+
+        const video = document.getElementById("remote");
+        const bgToggle = document.getElementById("bg-toggle");
+        var bg_toggle = true;
+        var happyAudio = document.getElementById("happyAudio");
+      
+        var toneAudio = document.getElementById("toneAudio");
+
+
+        bgToggle.onclick = () => {
+            if (bg_toggle) {
+                var tracks = document.getElementsByClassName("audios");
+                for (var i = 0; i < tracks.length; i++) {
+                    tracks[i].pause();
+                }
+                bg_toggle = false;
+
+                bgToggle.className = "btn btn-circle btn-md btn-light mx-2";
+                bgToggle.innerHTML =
+                    "<img src='https://img.icons8.com/material-outlined/24/000000/musical-notes.png'/>";
+            } else {
+                bg_toggle = true;
+                bgToggle.className = "btn btn-circle btn-md btn-danger mx-2";
+                bgToggle.innerHTML =
+                    "<img src='https://img.icons8.com/material-outlined/24/ffffff/musical-notes.png'/>";
+            }
+        };
+
+        //  button event listeners end
+
+        //  face API start
+
+        Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri("{% static '/models' %}"),
+            faceapi.nets.faceLandmark68Net.loadFromUri("{% static '/models' %}"),
+            faceapi.nets.faceRecognitionNet.loadFromUri("{% static '/models' %}"),
+            faceapi.nets.faceExpressionNet.loadFromUri("{% static '/models' %}"),
+        ]);
+
+        function faceAPI() {
+            //   const canvas = faceapi.createCanvasFromMedia(video)
+            //   document.body.append(canvas)
+
+            const displaySize = { width: 300, height: 300 };
+
+            //   faceapi.matchDimensions(canvas, displaySize)
+            var checkEmotion;
+            setInterval(async () => {
+                const detections = await faceapi
+                    .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+                    .withFaceLandmarks()
+                    .withFaceExpressions();
+                const resizedDetections = faceapi.resizeResults(
+                    detections,
+                    displaySize
+                );
+
+                // canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+                // faceapi.draw.drawDetections(canvas, resizedDetections)
+                // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+                // faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+
+                console.log(resizedDetections[0].expressions);
+                var exps = resizedDetections[0].expressions;
+
+                var mx = 0;
+                var maxm;
+                
+
+                for (var i in exps) {
+                    if (i != "asSortedArray") {
+                        if (exps[i] > mx) {
+                            mx = exps[i];
+                        }
+                    }
+                }
+
+                for (var i in exps) {
+                    if (i != "asSortedArray") {
+                        if (exps[i] == mx) {
+                            maxm = i;
+                        }
+                    }
+                }
+
+                if (bg_toggle) {
+                    if (maxm == "happy") {
+                        console.log(checkEmotion);
+                        if(checkEmotion != maxm){
+                            console.log("happy");
+                            happyAudio.play(); 
+                            happyAudio.volume = 0.2;
+                            neutralAudio.pause(); 
+                            sadAudio.pause(); 
+                            angryAudio.pause();
+                            fearfulAudio.pause();
+                            // neutralAudio.pause(); 
+
+                        }
+                        checkEmotion = maxm;
+                        
+                       
+                        
+                    } else if (maxm == "sad") {
+                        if(checkEmotion != maxm){
+                            console.log("sad");
+                            sadAudio.play(); 
+                            sadAudio.volume = 0.3;
+                            happyAudio.pause(); 
+                            neutralAudio.pause();
+                            angryAudio.pause(); 
+                            fearfulAudio.pause(); 
+
+                        }
+                        checkEmotion = maxm;
+                        
+
+                        
+                    } else if (maxm == "neutral") {
+                        console.log(checkEmotion);
+
+                        if(checkEmotion != maxm){
+
+                            console.log("neutral");
+
+                            neutralAudio.play(); 
+                            neutralAudio.volume = 0.2;
+                            happyAudio.pause();
+                            sadAudio.pause();
+                            angryAudio.pause();
+                            fearfulAudio.pause(); 
+
+                        }
+                        checkEmotion = maxm;
+                        
+
+                    }
+                    else if (maxm == "angry") {
+
+                        if(checkEmotion != maxm){
+
+                            console.log("angry");
+
+                            angryAudio.play(); 
+                            angryAudio.volume = 0.2;
+                            happyAudio.pause();
+                            sadAudio.pause();
+                            neutralAudio.pause();
+                            fearfulAudio.pause(); 
+
+                        } 
+                        checkEmotion = maxm; 
+                        
+
+                    }
+                    else if (maxm == "fearful") {
+                        if(checkEmotion != maxm){
+
+                            console.log("fearful");
+
+                            fearfulAudio.play(); 
+                            fearfulAudio.volume = 0.2;
+                            happyAudio.pause();
+                            sadAudio.pause();
+                            angryAudio.pause();
+                            neutralAudio.pause(); 
+
+                        }
+                        checkEmotion = maxm; 
+                        
+                        
+
+                    }
+                    
+                    
+                }
+            }, 10000);
+        }
+
+        //   face API end
+
+        //webRTC video start
+
+        var permissionModal = new bootstrap.Modal(
+            document.getElementById("modal"),
+            {
+                keyboard: false,
+            }
+        );
+
+        const our_video = document.getElementById("ours");
+        const remote_video = document.getElementById("remote");
+        const call_btn = document.getElementById("call");
+
+        const videoToggleBtn = document.getElementById("video-toggle");
+        const audioToggleBtn = document.getElementById("audio-toggle");
+
+        let stream;
+        let rtcpeerconnection;
+        const created = "{{created}}";
+        const room = "{{room}}";
+        let isCreated;
+
+        let iceServers = {
+            iceServers: [
+                //                 {
+                // "urls": [
+                // "turn:13.250.13.83:3478?transport=udp"
+                // ],
+                // "username": "YzYNCouZM1mhqhmseWk6",
+                // "credential": "YzYNCouZM1mhqhmseWk6"
+                // }
+                // { 'urls': 'stun:74.125.142.127:19302' }
+                // {"urls":"stun.nottingham.ac.uk:3478"}
+                // {
+                //     url: 'turn:192.158.29.39:3478?transport=tcp',
+                //     credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                //     username: '28224511:1379330808'
+                // }
+
+                {
+                    url: "turn:numb.viagenie.ca",
+                    credential: "muazkh",
+                    username: "webrtc@live.com",
+                },
+            ],
+        };
+
+        var loc = window.location;
+        var wsStart = "ws://";
+        if (loc.protocol == "https:") {
+            wsStart = "wss://";
+        }
+
+        var endPoint = wsStart + loc.host + "/ws/";
+        const ws = new WebSocket(endPoint);
+
+        ws.onopen = () => {
+            console.log("opened");
+            ws.send(
+                JSON.stringify({
+                    command: "join_room",
+                    room: room,
+                })
+            );
+            if (created == "created") {
+                isCreated = true;
+
+                navigator.mediaDevices
+                    .getUserMedia({
+                        video: true,
+                        audio: true,
+                    })
+                    .then((s) => {
+                        stream = s;
+                        our_video.srcObject = s;
+                        our_video.onloadedmetadata = () => {
+                            our_video.play();
+
+                            faceAPI();
+                        };
+
+                        var audioTracks = stream.getAudioTracks();
+                        var videoTracks = stream.getVideoTracks();
+
+                        audioTracks[0].enabled = true;
+                        videoTracks[0].enabled = true;
+
+                        audioToggleBtn.addEventListener("click", () => {
+                            audioTracks[0].enabled = !audioTracks[0].enabled;
+
+                            if (audioTracks[0].enabled) {
+                                audioToggleBtn.className =
+                                    "btn btn-circle btn-md btn-danger mx-2";
+                                return;
+                            }
+                            audioToggleBtn.className =
+                                "btn btn-circle btn-md btn-light mx-2";
+                        });
+
+                        videoToggleBtn.addEventListener("click", () => {
+                            videoTracks[0].enabled = !videoTracks[0].enabled;
+
+                            if (videoTracks[0].enabled) {
+                                videoToggleBtn.className =
+                                    "btn btn-circle btn-md btn-danger mx-2";
+                                return;
+                            }
+                            videoToggleBtn.className =
+                                "btn btn-circle btn-md btn-light mx-2";
+                        });
+                        // end
+                    });
+            } else {
+                isCreated = false;
+                navigator.mediaDevices
+                    .getUserMedia({
+                        video: true,
+                        audio: true,
+                    })
+                    .then((s) => {
+                        stream = s;
+                        our_video.srcObject = s;
+                        our_video.onloadedmetadata = () => {
+                            our_video.play();
+                            faceAPI();
+                        };
+                        // try
+
+                        var audioTracks = stream.getAudioTracks();
+                        var videoTracks = stream.getVideoTracks();
+
+                        audioTracks[0].enabled = true;
+                        videoTracks[0].enabled = true;
+
+                        audioToggleBtn.addEventListener("click", () => {
+                            audioTracks[0].enabled = !audioTracks[0].enabled;
+
+                            if (audioTracks[0].enabled) {
+                                audioToggleBtn.className =
+                                    "btn btn-circle btn-md btn-danger mx-2";
+                                return;
+                            }
+                            audioToggleBtn.className =
+                                "btn btn-circle btn-md btn-light mx-2";
+                        });
+
+                        videoToggleBtn.addEventListener("click", () => {
+                            videoTracks[0].enabled = !videoTracks[0].enabled;
+
+                            if (videoTracks[0].enabled) {
+                                videoToggleBtn.className =
+                                    "btn btn-circle btn-md btn-danger mx-2";
+                                return;
+                            }
+                            videoToggleBtn.className =
+                                "btn btn-circle btn-md btn-light mx-2";
+                        });
+                        ws.send(
+                            JSON.stringify({
+                                command: "join",
+                                room: room,
+                            })
+                        );
+                    });
+            }
+            console.log(isCreated);
+        };
+
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            console.log(data);
+            if (data["command"] == "join") {
+                if (isCreated) {
+                    permissionModal.show();
+                }
+            } else if (data["command"] == "offer") {
+                if (isCreated == false) {
+                    createanswer(data["offer"]);
+                }
+            } else if (data["command"] == "answer") {
+                if (isCreated) {
+                    rtcpeerconnection.setRemoteDescription(data["answer"]);
+
+                    console.log("answer set as remote");
+                }
+            } else if (data["command"] == "candidate") {
+                if (data["iscreated"] != isCreated) {
+                    const IceCandidate = new RTCIceCandidate(data["candidate"]);
+                    rtcpeerconnection.addIceCandidate(IceCandidate);
+                }
+            } else if (data["command"] == "chat") {
+                const data2 = JSON.parse(e.data);
+                document.querySelector(
+                    "#chat-log"
+                ).innerHTML += `<div style="background:#3a2d49; border-radius:5px" ><h5 style="color:white; font-size:0.86rem; padding:0.6rem; padding-top:0.8rem; ">${data2.chat}</h5></div>`;
+                // console.log(data2.chat);
+                console.log(data2.name);
+                console.log(randomName);
+
+                var notificationAudio = document.getElementById("notificationAudio");
+
+                
+
+                if (data2.name != randomName) {
+                    speakVoice(data2.chat);
+                    notificationAudio.play();
+
+
+                }
+            }
+        };
+
+        call_btn.onclick = () => {
+            createoffer();
+        };
+
+        function createoffer() {
+            rtcpeerconnection = new RTCPeerConnection(iceServers);
+            rtcpeerconnection.onicecandidate = OnIceCandidateFunc;
+            rtcpeerconnection.ontrack = OnTrackFunc;
+            stream.getTracks().forEach((track) => {
+                rtcpeerconnection.addTrack(track, stream);
+            });
+            rtcpeerconnection.createOffer().then((offer) => {
+                rtcpeerconnection.setLocalDescription(offer);
+                ws.send(
+                    JSON.stringify({
+                        command: "offer",
+                        offer: offer,
+                        room: room,
+                    })
+                );
+            });
+        }
+
+        function OnIceCandidateFunc(e) {
+            if (e.candidate) {
+                ws.send(
+                    JSON.stringify({
+                        command: "candidate",
+                        candidate: e.candidate,
+                        iscreated: isCreated,
+                        room: room,
+                    })
+                );
+            }
+        }
+        function OnTrackFunc(e) {
+            remote_video.srcObject = e.streams[0];
+            remote_video.onloadedmetadata = () => {
+                remote_video.play();
+                permissionModal.hide();
+            };
+        }
+
+        function createanswer(offer) {
+            rtcpeerconnection = new RTCPeerConnection(iceServers);
+            rtcpeerconnection.onicecandidate = OnIceCandidateFunc;
+            rtcpeerconnection.ontrack = OnTrackFunc;
+            stream.getTracks().forEach((track) => {
+                rtcpeerconnection.addTrack(track, stream);
+            });
+            rtcpeerconnection.setRemoteDescription(offer);
+            rtcpeerconnection.createAnswer().then((answer) => {
+                rtcpeerconnection.setLocalDescription(answer);
+                ws.send(
+                    JSON.stringify({
+                        command: "answer",
+                        answer: answer,
+                        room: room,
+                    })
+                );
+            });
+        }
+
+        //   webRTC video end
+
+        // copy to clipboard start
+
+        function copyFunction() {
+            var copyText = document.getElementById("myInput");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+
+            alert("Copied the Meet Code: " + copyText.value);
+        }
+
+        // copy to end
+
+        // chat start
+
+        var chat_trigger = false;
+        document
+            .querySelector("#chat_toggle")
+            .addEventListener("click", function () {
+                var x = window.matchMedia("(max-width: 770px)");
+                myFunction(x);
+                x.addListener(myFunction);
+
+                if (chat_trigger == false) {
+                    console.log("click");
+                    document.getElementById("main_container").className = "col-9";
+                    chat_trigger = true;
+                    document.querySelector("#chat_container").style.display = "block";
+                } else {
+                    document.getElementById("main_container").className = "col-12";
+                    // document.getElementById("remote_container").className = "col-lg-6 col-md-6 mb-3"
+                    chat_trigger = false;
+                    document.querySelector("#chat_container").style.display = "none";
+                    document.getElementById("main_container").style.display = "block";
+                }
+            });
+
+        // chat end
+
+        //text to speech toggle start
+
+        var tts_toggle = document.getElementById("tts-toggle");
+        var tts_bool = true;
+
+        tts_toggle.addEventListener("click", () => {
+            if (tts_bool) {
+                tts_bool = false;
+                tts_toggle.className = "btn btn-circle btn-sm btn-light mt-3 mx-2 ";
+                
+            } else {
+                tts_bool = true;
+                tts_toggle.className = "btn btn-circle btn-sm btn-danger mt-3 mx-2 ";
+            }
+        });
+
+        //text to speech toggle end
+
+        // text to speech start
+
+        let utterance;
+
+        window.speechSynthesis.onvoiceschanged = function () {
+            const voices = window.speechSynthesis.getVoices();
+        };
+
+        function speakVoice(message) {
+            voices = speechSynthesis.getVoices();
+            utterance = new SpeechSynthesisUtterance(message);
+            utterance.voice = voices[12];
+            if (tts_bool) {
+                utterance.volume = 1;
+            } else {
+                utterance.volume = 0;
+            }
+            speechSynthesis.speak(utterance);
+        }
+
+        document.querySelector("#chat-message-input").focus();
+        document.querySelector("#chat-message-input").onkeyup = function (e) {
+            if (e.keyCode === 13) {
+                // enter, return
+                document.querySelector("#chat-message-submit").click();
+            }
+        };
+
+        document.querySelector("#chat-message-submit").onclick = function (e) {
+            const messageInputDom = document.querySelector("#chat-message-input");
+            const chat = messageInputDom.value;
+            ws.send(
+                JSON.stringify({
+                    command: "chat",
+                    chat: chat,
+                    room: room,
+                    name: randomName,
+                })
+            );
+            messageInputDom.value = "";
+        };
+
+        // text to speech end
+
+        // media query start
+
+        function myFunction(x) {
+            if (x.matches) {
+                document.getElementById("main_container").style.display = "none";
+                document.getElementById("chat_container").className = "col-md-12";
+                document.getElementById("row").style.width = "100vw";
+            }
+        }
+
+      // media query end
+    </script>
 </body>
 
 </html>
