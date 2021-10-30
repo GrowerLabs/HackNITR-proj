@@ -122,27 +122,3 @@ createsuperuser
 **Image Source** Unsplash
 
 
-## Screenshots
-
-![App Screenshot](https://i.imgur.com/STz5EcD.png)
-
-
-
-![App Screenshot](https://i.imgur.com/05KXhBt.png)
-
-
-
-![App Screenshot](https://i.imgur.com/moxgN67.png)
-
-
-
-![App Screenshot](https://i.imgur.com/WycWkFM.png)
-
-
-
-![App Screenshot](https://i.imgur.com/0woYfPz.png)
-
-
-
-![App Screenshot](https://i.imgur.com/bGvdEju.png)
-
