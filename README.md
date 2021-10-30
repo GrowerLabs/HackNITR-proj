@@ -3,7 +3,7 @@
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/shayan-cyber/HackNITR-proj.git
 ```
 
 Make virtual env
