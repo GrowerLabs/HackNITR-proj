@@ -1,4 +1,4 @@
-## Run Locally(python 3.6 preffered)
+## Run Locally(python 3.6+ preffered)
 
 Clone the project
 
