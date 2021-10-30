@@ -18,7 +18,7 @@ activate env
   . env/Scripts/activate
 ```
 
-install dependencies(python 3.8+)
+install dependencies
 
 ```bash
     pip install -r requirements.txt
