@@ -14,6 +14,10 @@ This platform can easily target visually impaired people who can understand the 
 ![Logo](https://i.imgur.com/7JyHw1F.png)
 
 
+## Presentation Link:
+
+https://www.canva.com/design/DAEuFi9Er-E/a_bBT2zx136xh_wTZELFoA/view?utm_content=DAEuFi9Er-E&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton
+
 
 
 
