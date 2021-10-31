@@ -16,7 +16,7 @@ This platform can easily target visually impaired people who can understand the 
 
 ## PPT Link:
 
-https://www.canva.com/design/DAEuFi9Er-E/a_bBT2zx136xh_wTZELFoA/view?utm_content=DAEuFi9Er-E&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton
+https://www.canva.com/design/DAEuFi9Er-E/a_bBT2zx136xh_wTZELFoA/view?utm_content=DAEuFi9Er-E&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
 
 
 ## Presentation video link:
