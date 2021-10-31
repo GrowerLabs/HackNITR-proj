@@ -1,0 +1,151 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us</title>
+
+  <!-- bootsrapcdn -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <!-- font-awesome-cdn -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+  <!-- font-family -->
+
+
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="{% static 'styles.css' %]">
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/favicon.ico">
+
+
+
+
+</head>
+
+
+<style>
+
+body {
+  background-color: black;
+  font-family: "Nunito", sans-serif;
+}
+
+/* Navbar */
+
+.navBar {
+  padding: 1% 4%;
+}
+
+#nav_link {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  letter-spacing: 0.065em;
+  color: #a2a6a6;
+}
+
+#nav_link:hover {
+  color: #00f0ff;
+}
+
+#logo {
+  height: 3.5rem;
+  /* width: */
+}
+
+#only {
+  height: 2.5rem;
+}
+
+/* About-Us */
+.about-us {
+  width: 30rem;
+  position: absolute;
+  top: 12rem;
+  left: 8rem;
+}
+
+#title {
+  padding: 17% 7%;
+}
+
+/* Images-of-Us */
+
+.our-img {
+  width: 50rem;
+  position: absolute;
+  right: 75px;
+  top: 70px;
+}
+
+#growerlabs-logo {
+  height: 3.7rem;
+  text-align: left;
+}
+
+</style>
+
+<body>
+
+  <!-- navbar -->
+  <nav style="background-color: black" class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container-fluid navBar">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="streamconnect" href="#">
+        <img id="logo" src="{% static 'Logo.svg' %}"></img>
+      </a>
+
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+        
+        <div class="navbar-nav ">
+          <a id="nav_link" class="nav-link active px-3 py-4 active-link" aria-current="page" href="/">Home</a>
+          <a id="nav_link" class="nav-link active px-3 py-4 " aria-current="page" href="/">Features</a>
+          <a id="nav_link" class="nav-link active px-3 py-4 " aria-current="page" href="#">About Us</a>
+
+        </div>
+      </div>
+
+
+      <div class="justify-content-end px-3 collapse navbar-collapse" id="navbarNavAltMarkup">
+
+        <img id="only" src="{% static 'Only_for_desktop.svg' %}"></img>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- container -->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6" id="title">
+         <img src="{% static 'about-us-new-01.svg' %}" class="about-us" alt="about-us">
+           <div class="footer">
+          <!-- <img style="margin-bottom: 4rem;" id="growerlabs-logo" src="{% static 'Logo.svg' %}" alt=""> -->
+        </div>
+       </div>
+      <div class="col-lg-6">
+        <img src="{% static 'illus1-01.svg' %}" class="our-img"  alt="images-of-team-members">
+      </div>
+     </div>
+  </div>
+  
+</body>
+
+</html>

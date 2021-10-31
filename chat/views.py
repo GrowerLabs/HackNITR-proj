@@ -48,3 +48,8 @@ def close_meet(request,room, created):
         
 
     return redirect("/")
+
+
+
+def about_us(request):
+    return render(request, 'chat/about_us.html')

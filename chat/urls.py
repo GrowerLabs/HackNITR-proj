@@ -7,4 +7,5 @@ urlpatterns = [
     path('video/<str:room>/<str:created>/', views.video, name='video'),
     path("new_meet/", views.new_meet, name='new_meet'),
     path('close_meet/<str:room>/<str:created>/', views.close_meet, name='close_meet'),
+    path('about_us/', views.about_us, name='about_us')
 ]
