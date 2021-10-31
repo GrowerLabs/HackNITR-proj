@@ -82,17 +82,33 @@ activate env
   . env/Scripts/activate
 ```
 
+
+navigate to the directory
+
+```bash
+  cd HackNITR-proj
+```
+
+
 install dependencies(python 3.8+)
 
 ```bash
     pip install -r requirements.txt
 ```
 
-navigate to the directory
+
+
+if previous command shows error install dependencies(python 3.6+) through
 
 ```bash
-  cd core
+  python -m pip install --upgrade pip
 ```
+
+
+```bash
+    pip install -r software.txt
+```
+
 
 start the server
 
